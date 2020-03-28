@@ -33,8 +33,9 @@
 			repeat(outdata, val) {
 				let _this = this
 				//重复数据
-				let repList = outdata.map((item, index) => {
-					let data = outdata.findIndex(a => a[val] === item[val]);
+				let arr = outdata.map((item, index) => {
+					// let data = outdata.findIndex(a => a[val] === item[val]);
+					let data = item[val]
 					return data
 				})
 				// 				repList.forEach((item, index) => {
@@ -42,21 +43,18 @@
 				// 						_this.error += '第' + (repList.indexOf(item) + 1) + '和' + (index + 1) + '行' + val + '重复\n'
 				// 					}
 				// 				});
-				_this.searchKeys(repList, val)
-			},
-			searchKeys(arr, val) {
-				var strary = [];
-				for (var i = 0; i < arr.length; i++) {
-					var hasRead = false;
-					for (var k = 0; k < strary.length; k++) {
+				let strary = [];
+				for (let i = 0; i < arr.length; i++) {
+					let hasRead = false;
+					for (let k = 0; k < strary.length; k++) {
 						if (strary[k] == arr[i]) {
 							hasRead = true;
 						}
 					}
 					if (!hasRead) {
-						var _index = i,
+						let _index = i,
 							haveSame = false;
-						for (var j = i + 1; j < arr.length; j++) {
+						for (let j = i + 1; j < arr.length; j++) {
 							if (j == parseInt(i) + parseInt(1)) {
 								_index++;
 							}
@@ -72,28 +70,29 @@
 					}
 				}
 			},
+
 			importf(obj) {
 				let _this = this;
 				let inputDOM = this.$refs.inputer; // 通过DOM取文件数据
 				this.file = event.currentTarget.files[0];
-				var rABS = false; //是否将文件读取为二进制字符串
-				var f = this.file;
-				var reader = new FileReader();
+				let rABS = false; //是否将文件读取为二进制字符串
+				let f = this.file;
+				let reader = new FileReader();
 				//if (!FileReader.prototype.readAsBinaryString) {
 				FileReader.prototype.readAsBinaryString = function(f) {
-					var binary = "";
-					var rABS = false; //是否将文件读取为二进制字符串
-					var pt = this;
-					var wb; //读取完成的数据
-					var outdata;
-					var reader = new FileReader();
+					let binary = "";
+					let rABS = false; //是否将文件读取为二进制字符串
+					let pt = this;
+					let wb; //读取完成的数据
+					let outdata;
+					let reader = new FileReader();
 					reader.onload = function(e) {
-						var bytes = new Uint8Array(reader.result);
-						var length = bytes.byteLength;
-						for (var i = 0; i < length; i++) {
+						let bytes = new Uint8Array(reader.result);
+						let length = bytes.byteLength;
+						for (let i = 0; i < length; i++) {
 							binary += String.fromCharCode(bytes[i]);
 						}
-						var XLSX = require('xlsx');
+						let XLSX = require('xlsx');
 						if (rABS) {
 							wb = XLSX.read(btoa(fixdata(binary)), { //手动转化
 								type: 'base64'
@@ -105,7 +104,7 @@
 						}
 						// outdata就是你想要的东西 excel导入的数据
 						outdata = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-
+						console.log(outdata['身份证'])
 						// 获取表头名字
 						let keyName = []
 						for (let i in outdata[0]) {

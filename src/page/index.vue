@@ -37,11 +37,40 @@
 					let data = outdata.findIndex(a => a[val] === item[val]);
 					return data
 				})
-				repList.forEach((item, index) => {
-					if (repList.indexOf(item) != index) { // 匹配数组元素第一个item位置和当前循环的index
-						_this.error += '第' + (repList.indexOf(item) + 1) + '和' + (index + 1) + '行' + val + '重复\n'
+				// 				repList.forEach((item, index) => {
+				// 					if (repList.indexOf(item) != index) { // 匹配数组元素第一个item位置和当前循环的index
+				// 						_this.error += '第' + (repList.indexOf(item) + 1) + '和' + (index + 1) + '行' + val + '重复\n'
+				// 					}
+				// 				});
+				_this.searchKeys(repList, val)
+			},
+			searchKeys(arr, val) {
+				var strary = [];
+				for (var i = 0; i < arr.length; i++) {
+					var hasRead = false;
+					for (var k = 0; k < strary.length; k++) {
+						if (strary[k] == arr[i]) {
+							hasRead = true;
+						}
 					}
-				});
+					if (!hasRead) {
+						var _index = i,
+							haveSame = false;
+						for (var j = i + 1; j < arr.length; j++) {
+							if (j == parseInt(i) + parseInt(1)) {
+								_index++;
+							}
+							if (arr[i] == arr[j]) {
+								_index += "," + (parseInt(j) + 1);
+								haveSame = true;
+							}
+						}
+						if (haveSame) {
+							strary.push(arr[i]);
+							this.error += val + "第" + _index + "行数据重复\n";
+						}
+					}
+				}
 			},
 			importf(obj) {
 				let _this = this;
@@ -87,9 +116,9 @@
 						//验证表格
 						let aa = outdata.map((i, index) => {
 							if (cardTest.test(i.身份证) !== true)
-								_this.error += '第' + parseInt(index + 1) + '行身份证格式不准确\n'
+								_this.error += '身份证第' + (index + 1) + '行格式有误\n'
 							if (phoneTest.test(i.手机号) !== true)
-								_this.error += '第' + parseInt(index + 1) + '行手机号格式不准确\n'
+								_this.error += '手机号第' + (index + 1) + '行格式有误\n'
 						})
 						// if(_this.error==='')如果没有报错再做入库处理处理
 						// excel 数据再处理

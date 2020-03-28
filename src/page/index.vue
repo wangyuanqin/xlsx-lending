@@ -106,6 +106,12 @@
 						// outdata就是你想要的东西 excel导入的数据
 						outdata = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
 
+						// 获取表头名字
+						let keyName = []
+						for (let i in outdata[0]) {
+							keyName.push(i); //把json键名加入表头数组
+						}
+						console.log(keyName, '表头')
 						//重复数据
 						_this.repeat(outdata, '学号')
 						_this.repeat(outdata, '身份证')
@@ -114,10 +120,10 @@
 							/^[1-9][0-9]{5}(19|20)[0-9]{2}((01|03|05|07|08|10|12)(0[1-9]|[1-2][0-9]|31)|(04|06|09|11)(0[1-9]|[1-2][0-9]|30)|02(0[1-9]|[1-2][0-9]))[0-9]{3}([0-9]|x|X)$/
 						let phoneTest = /^1[3456789]\d{9}$/
 						//验证表格
-						let aa = outdata.map((i, index) => {
-							if (cardTest.test(i.身份证) !== true)
+						outdata.forEach((item, index) => {
+							if (cardTest.test(item.身份证) !== true)
 								_this.error += '身份证第' + (index + 1) + '行格式有误\n'
-							if (phoneTest.test(i.手机号) !== true)
+							if (phoneTest.test(item.手机号) !== true)
 								_this.error += '手机号第' + (index + 1) + '行格式有误\n'
 						})
 						// if(_this.error==='')如果没有报错再做入库处理处理
@@ -132,7 +138,7 @@
 							arr.push(obj)
 						})
 						_this.tableData = [...arr]
-						console.log(_this.tableData)
+						console.log(_this.tableData, '转变后数据')
 						document.getElementById('importf').value = null; //清除相同文件不出发
 					}
 					reader.readAsArrayBuffer(f);

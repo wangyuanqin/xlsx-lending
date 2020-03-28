@@ -104,7 +104,6 @@
 						}
 						// outdata就是你想要的东西 excel导入的数据
 						outdata = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-						console.log(outdata['身份证'])
 						// 获取表头名字
 						let keyName = []
 						for (let i in outdata[0]) {
